@@ -1,0 +1,37 @@
+.setup {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  background: #050608;
+  color: #fff;
+  font-family: var(--font-barlow), sans-serif;
+}
+
+.setup h1,
+.setup p {
+  max-width: 42rem;
+}
+
+.setup h1 {
+  font-family: var(--font-nasalization), sans-serif;
+  text-transform: uppercase;
+}
+
+.setup code {
+  font-family: var(--font-mono), monospace;
+  color: #dce6f0;
+}
+
+.setup a {
+  width: fit-content;
+  border-bottom: 1px solid currentColor;
+}
+
+.eyebrow {
+  font-family: var(--font-mono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.62);
+}

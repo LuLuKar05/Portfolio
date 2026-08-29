@@ -1,0 +1,51 @@
+import { defineQuery } from "next-sanity";
+
+export const portfolioQuery = defineQuery(`{
+  "settings": *[_type == "siteSettings"][0]{
+    name,
+    portfolioLabel,
+    availability,
+    heroLead,
+    heroMuted,
+    stats[]{value, label},
+    awards[]{rank, event, note, year, project},
+    skills[]{name, code, items},
+    timeline[]{year, role, "organisation": organization, note},
+    timelineNote,
+    aboutTitle,
+    aboutPrimary,
+    aboutSecondary,
+    "portraitUrl": portrait.asset->url,
+    portraitAlt,
+    contactTitle,
+    contactCopy,
+    contactEmail,
+    channels[]{label, value, href},
+    "resumeUrl": resume.asset->url,
+    seoTitle,
+    seoDescription,
+    backgroundColor,
+    inkColor,
+    accentColor,
+    showPlanets,
+    orbitSpeed,
+    starDensity
+  },
+  "projects": *[_type == "project"] | order(order asc){
+    "slug": slug.current,
+    number,
+    title,
+    category,
+    filterCategory,
+    year,
+    summary,
+    meta,
+    award,
+    tags,
+    githubUrl,
+    liveUrl,
+    "imageUrl": image.asset->url,
+    imageAlt,
+    blocks[]{heading, body}
+  }
+}`);

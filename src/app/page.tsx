@@ -1,69 +1,49 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import type { Metadata } from "next";
 
-export default function Home() {
+import { PortfolioExperience } from "@/components/portfolio-experience";
+import { getPortfolioContent } from "@/sanity/lib/fetch-site";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPortfolioContent();
+
+  return {
+    title: { absolute: content.seoTitle },
+    description: content.seoDescription,
+    openGraph: {
+      title: content.seoTitle,
+      description: content.seoDescription,
+      url: "/",
+    },
+    twitter: {
+      title: content.seoTitle,
+      description: content.seoDescription,
+    },
+  };
+}
+
+export default async function Home() {
+  const content = await getPortfolioContent();
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: content.name,
+    url: "https://myomyatthiha.com",
+    jobTitle: "Full-stack Engineer",
+    description: content.seoDescription,
+    sameAs: content.channels
+      .map((channel) => channel.href)
+      .filter((href) => href.startsWith("https://")),
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+        }}
+      />
+      <PortfolioExperience content={content} />
+    </>
   );
 }
